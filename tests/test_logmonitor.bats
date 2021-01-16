@@ -50,9 +50,11 @@ teardown() {
     count1=0
     count2=0
     for item in "${lines[@]}"; do
-        if [ "$item" == "ERROR: Test1 title Test description" ]; then
+        regex1=".*ERROR: Test1 title Test description"
+        regex2=".*ERROR: Test2 title Test description"
+        if [[ "$item" =~ $regex1 ]]; then
             count1="$(expr $count1 + 1)"
-        elif [ "$item" == "ERROR: Test2 title Test description" ]; then
+        elif [[ "$item" =~ $regex2 ]]; then
             count2="$(expr $count2 + 1)"
         fi
     done
@@ -96,9 +98,11 @@ teardown() {
     count1=0
     count2=0
     for item in "${lines[@]}"; do
-        if [ "$item" == "ERROR: Test1 title Test description" ]; then
+        regex1=".*ERROR: Test1 title Test description"
+        regex2=".*ERROR: Test2 title Test description"
+        if [[ "$item" =~ $regex1 ]]; then
             count1="$(expr $count1 + 1)"
-        elif [ "$item" == "ERROR: Test2 title Test description" ]; then
+        elif [[ "$item" =~ $regex2 ]]; then
             count2="$(expr $count2 + 1)"
         fi
     done

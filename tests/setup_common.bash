@@ -2,12 +2,16 @@
 get_init_script_exit_code() {
     script=$1
     lines=$2
-    regex="^\[cont-init\.d\] $script: exited ([0-9]+)\.$"
+    regex_success=".* $script: terminated successfully"
+    regex_failure=".* $script: terminated with error ([0-9]+)"
 
     for item in "${lines[@]}"; do
-        if [[ "$item" =~ $regex ]]; then
+        if [[ "$item" =~ $regex_failure ]]; then
             echo ${BASH_REMATCH[1]}
-            return 0;
+            return 0
+        elif [[ "$item" =~ $regex_success ]]; then
+            echo "0"
+            return 0
         fi
     done
 
@@ -23,3 +27,6 @@ docker_run() {
 
 # Make sure the docker image exists.
 docker inspect "$DOCKER_IMAGE" > /dev/null
+
+# Make sure there is no existing instance of the test container.
+docker stop dockertest 2> /dev/null && docker rm dockertest 2> /dev/null || true
